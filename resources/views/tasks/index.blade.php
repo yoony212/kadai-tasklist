@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="prose ml-4">
-        <h2>メッセージ 一覧</h2>
+        <h2>タスク一覧</h2>
     </div>
 
     @if (isset($tasks))
@@ -11,7 +11,8 @@
             <thead>
                 <tr>
                     <th>id</th>
-                    <th>メッセージ</th>
+                    <th>タスク</th>
+                    <th>ステータス</th>
                 </tr>
             </thead>
             <tbody>
@@ -19,6 +20,7 @@
                 <tr>
                     <td><a class="link link-hover text-info" href="{{ route('tasks.show', $task->id) }}">{{ $task->id }}</a></td>
                     <td>{{ $task->content }}</td>
+                    <td>{{ $task->status }}</td>
                 </tr>
                 @endforeach
             </tbody>
