@@ -1,0 +1,34 @@
+# fly.toml file generated for tasklist-yoon on 2023-04-17T11:42:44Z
+
+app = "tasklist-yoon"
+primary_region = "nrt"
+
+[build]
+  [build.args]
+    NODE_VERSION = "18"
+    PHP_VERSION = "8.1"
+
+[env]
+  APP_ENV = "production"
+  APP_URL = "https://tasklist-yoon.fly.dev"
+  APP_NAME = "tasklist-yoon"
+  APP_DEBUG = false
+  DB_CONNECTION = "pgsql"
+  DB_HOST = "db.wcircslinddogigjmkoz.supabase.co"
+  DB_PORT = 5432
+  DB_DATABASE = "postgres"
+  DB_USERNAME = "postgres"
+  LOG_CHANNEL = "stderr"
+  LOG_LEVEL = "info"
+  LOG_STDERR_FORMATTER = "Monolog\\Formatter\\JsonFormatter"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+
+[checks]
+  [checks.alive]
+    type = "tcp"
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "5s"
