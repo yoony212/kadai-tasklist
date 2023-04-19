@@ -20,7 +20,6 @@ class taskFactory extends Factory
     {
         $content = ['html', 'css', 'JS', 'PHP', 'laraval', 'vue.js', 'react'];
         $status = ['bad', 'not bad', 'so-so', 'good', 'fine', 'Excellent', 'yeees'];
-
         $content = $content[rand(0, count($content) - 1)];
         $status = $status[rand(0, count($status) - 1)];
         return [

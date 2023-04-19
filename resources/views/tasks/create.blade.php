@@ -24,6 +24,7 @@
                     <input type="text" name="status" class="input input-bordered w-full">
                 </div>
 
-            <button type="submit" class="btn btn-primary btn-outline">投稿</button>        </form>
+            <button type="submit" class="btn btn-primary btn-outline">投稿</button>
+        </form>
     </div>
 @endsection

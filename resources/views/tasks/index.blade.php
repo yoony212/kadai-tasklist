@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
     <div class="prose ml-4">
         <h2>タスク一覧</h2>
     </div>
@@ -30,5 +29,4 @@
     {{ $tasks->links() }}
     {{-- タスク作成ページへのリンク --}}
     <a class="btn btn-primary" href="{{ route('tasks.create') }}">タスクの投稿</a>
-
 @endsection

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Models\task;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\TasksController;
 
 class TasksController extends Controller
 {
@@ -16,12 +18,20 @@ class TasksController extends Controller
     public function index()
     {
         // メッセージ一覧を取得
-        $tasks = task::orderBy('id', 'desc')->paginate(25);
+        $data = [];
+        if (\Auth::check()) { // 認証済みの場合
+            // 認証済みユーザを取得
+            $user = \Auth::user();
+            // ユーザの投稿の一覧を作成日時の降順で取得
+            $tasks = $user->tasks()->orderBy('created_at', 'desc')->paginate(5);
+            $data = [
+                'user' => $user,
+                'tasks' => $tasks,
+            ];
+        }
 
         // メッセージ一覧ビューでそれを表示
-        return view('tasks.index', [
-            'tasks' => $tasks,
-        ]);
+        return view('dashboard', $data);
     }
 
     /**
@@ -54,11 +64,12 @@ class TasksController extends Controller
         // メッセージを作成
         $task = new task;
         $task->content = $request->content;
-        $task->status = $request->status; 
+        $task->status = $request->status;
+        $task->user_id = \Auth::id();
         $task->save();
 
         // トップページへリダイレクトさせる
-        return redirect('/');
+        return redirect('/dashboard');
     }
 
     /**
@@ -116,7 +127,7 @@ class TasksController extends Controller
         $task->save();
 
         // トップページへリダイレクトさせる
-        return redirect('/');
+        return redirect('/dashboard');
     }
 
     /**
@@ -133,6 +144,6 @@ class TasksController extends Controller
         $task->delete();
 
         // トップページへリダイレクトさせる
-        return redirect('/');
+        return redirect('/dashboard');
     }
 }
