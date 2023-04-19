@@ -16,12 +16,12 @@ class TasksController extends Controller
     public function index()
     {
         // メッセージ一覧を取得
-        $tasks = task::all();         // 追加
+        $tasks = task::orderBy('id', 'desc')->paginate(25);
 
         // メッセージ一覧ビューでそれを表示
-        return view('tasks.index', [     // 追加
-            'tasks' => $tasks,        // 追加
-        ]);                                 // 追加
+        return view('tasks.index', [
+            'tasks' => $tasks,
+        ]);
     }
 
     /**
@@ -48,13 +48,13 @@ class TasksController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'status' => 'required|max:10',
-            'content' => 'required',
+            'status' => 'required',
+            'content' => 'required|max:255',
         ]);
         // メッセージを作成
         $task = new task;
-        $task->status = $request->status;
         $task->content = $request->content;
+        $task->status = $request->status; 
         $task->save();
 
         // トップページへリダイレクトさせる
@@ -104,16 +104,15 @@ class TasksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // バリデーション
         $request->validate([
-            'status' => 'required|max:10',
-            'content' => 'required',
+            'status' => 'required',
+            'content' => 'required|max:255',
         ]);
         // idの値でメッセージを検索して取得
         $task = task::findOrFail($id);
         // メッセージを更新
-        $task->status = $request->status;
         $task->content = $request->content;
+        $task->status = $request->status;
         $task->save();
 
         // トップページへリダイレクトさせる

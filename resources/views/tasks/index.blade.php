@@ -27,6 +27,8 @@
         </table>
     @endif
     
-    <a class="btn btn-primary" href="{{ route('tasks.create') }}">新規タスクの追加</a>
+    {{ $tasks->links() }}
+    {{-- タスク作成ページへのリンク --}}
+    <a class="btn btn-primary" href="{{ route('tasks.create') }}">タスクの投稿</a>
 
 @endsection
