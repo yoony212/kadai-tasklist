@@ -16,17 +16,12 @@ use App\Http\Controllers\TasksController;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard');
-});
-
-Route::get('/dashboard', [TasksController::class, 'index'])->middleware(['auth'])->name('dashboard');
+Route::get('/', [TasksController::class, 'index']);
 
 require __DIR__.'/auth.php';
 
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('users', UsersController::class, ['only' => ['index', 'show']]);
-    Route::resource('microposts', TasksController::class, ['only' => ['store', 'destroy']]);
+    Route::resource('tasks', TasksController::class);
+    Route::get('/dashboard', [TasksController::class, 'index'])->name('dashboard');
 });
-
-Route::resource('tasks', TasksController::class);

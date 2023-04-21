@@ -17,7 +17,7 @@ class TasksController extends Controller
      */
     public function index()
     {
-        // メッセージ一覧を取得
+        // タスク一覧を取得
         $data = [];
         if (\Auth::check()) { // 認証済みの場合
             // 認証済みユーザを取得
@@ -29,8 +29,7 @@ class TasksController extends Controller
                 'tasks' => $tasks,
             ];
         }
-
-        // メッセージ一覧ビューでそれを表示
+        // タスク一覧ビューでそれを表示
         return view('dashboard', $data);
     }
 
@@ -43,7 +42,7 @@ class TasksController extends Controller
     {
         $task = new task;
 
-        // メッセージ作成ビューを表示
+        // タスク作成ビューを表示
         return view('tasks.create', [
             'task' => $task,
         ]);
@@ -61,7 +60,7 @@ class TasksController extends Controller
             'status' => 'required',
             'content' => 'required|max:255',
         ]);
-        // メッセージを作成
+        // タスクを作成
         $task = new task;
         $task->content = $request->content;
         $task->status = $request->status;
@@ -80,13 +79,15 @@ class TasksController extends Controller
      */
     public function show($id)
     {
-        // idの値でメッセージを検索して取得
         $task = task::findOrFail($id);
-
-        // メッセージ詳細ビューでそれを表示
-        return view('tasks.show', [
-            'task' => $task,
-        ]);
+        if (\Auth::id() === $task->user_id) {
+            // タスク詳細ビューでそれを表示
+            return view('tasks.show', [
+                'task' => $task,
+            ]);
+        } else {
+            return redirect('/dashboard');
+        }
     }
 
     /**
@@ -97,13 +98,16 @@ class TasksController extends Controller
      */
     public function edit($id)
     {
-        // idの値でメッセージを検索して取得
         $task = task::findOrFail($id);
-
-        // メッセージ編集ビューでそれを表示
-        return view('tasks.edit', [
-            'task' => $task,
-        ]);
+        if (\Auth::id() === $task->user_id) {
+            // タスク編集ビューでそれを表示
+            return view('tasks.edit', [
+                'task' => $task,
+            ]);
+        } else {
+            return redirect('/dashboard');
+        }
+        
     }
 
     /**
@@ -119,7 +123,7 @@ class TasksController extends Controller
             'status' => 'required',
             'content' => 'required|max:255',
         ]);
-        // idの値でメッセージを検索して取得
+        // idの値でタスクを検索して取得
         $task = task::findOrFail($id);
         // メッセージを更新
         $task->content = $request->content;
@@ -138,12 +142,16 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
-        // idの値でメッセージを検索して取得
         $task = task::findOrFail($id);
-        // メッセージを削除
-        $task->delete();
-
-        // トップページへリダイレクトさせる
+        if (\Auth::id() === $task->user_id) {
+            // タスクを削除
+            $task->delete();
+    
+            // タスク編集ビューでそれを表示
+            return view('tasks.edit', [
+                'task' => $task,
+            ]);
+        }
         return redirect('/dashboard');
     }
 }
